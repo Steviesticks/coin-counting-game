@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -236,7 +235,7 @@ button.restart{
 <div class="game-row">
 
   <div class="character">
-    <img src="assets/Kish.png" alt="Kish speaking">
+    <img id="kish" src="assets/Kish1.png" alt="Kish speaking">
 
   </div>
 
@@ -387,6 +386,16 @@ function coinSVGFallback(type,sz){
 
 const coinTypes = ['1p','2p','5p','10p','20p','50p','£1','£2'];
 
+// Kish image sequence
+const kish_poses = ['Kish1.png', 'Kish2.png', 'Kish3.png', 'Kish4.png'];
+let kish_index = 0;
+
+function changeKish() {
+  const kish = document.getElementById('kish');
+  kish_index = (kish_index + 1) % kish_poses.length;
+  kish.src = 'assets/' + kish_poses[kish_index];
+}
+
 function generateLevels() {
   let levels = [];
   function sameCombo(a,b) {
@@ -534,6 +543,7 @@ function check(){
     inp.className='ok';
     score+=Math.max(1,3-att);
     document.getElementById('sc').textContent=score;
+    changeKish();
     setTimeout(()=>{cur++;if(cur>=LEVELS.length)showWin();else render();},1200);
   } else {
     att++;
