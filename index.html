@@ -215,7 +215,59 @@ button.restart{
     font-size: 0.75rem;
   }
 }}
-</style>
+
+/* extra adjustments for smaller phones to keep gameplay above keyboard */
+@media (max-width:700px) {
+  h1 {
+    font-size: 1.4rem;
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+  }
+  .level-bar {
+    margin-bottom: 4px;
+  }
+  .dot {
+    width: 12px;
+    height: 12px;
+  }
+  .top-bar {
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+  }
+  .top-bar .val {
+    font-size: 1rem;
+  }
+  .card {
+    padding: 8px;
+  }
+  .speech-bubble {
+    margin: 3px auto 5px auto;
+    padding: 6px 12px;
+  }
+  .game-row {
+    gap: 15px;
+    margin-bottom: 8px;
+  }
+  .coins-area {
+    min-height: 60px;
+    padding: 8px;
+  }
+  .input-row {
+    margin-top: 10px;
+  }
+  input[type=text] {
+    width: 80px;
+    height: 50px;
+    font-size: 1.8rem;
+  }
+  button.check {
+    padding: 12px 24px;
+    font-size: 1rem;
+  }
+}
 </head>
 <body>
 <div class="wrap">
