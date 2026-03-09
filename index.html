@@ -1,127 +1,329 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Coin Counting Game</title>
-<!-- Andika: SIL Open Font Licence, designed for early/literacy learners.
-     NOTE on Sassoon: Sassoon Infant Primary is a commercial Monotype font.
-     You need a paid web licence to embed it. Andika is the closest free
-     alternative designed specifically for literacy and early readers. -->
 <link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
+
 body{
   font-family:'Andika','Comic Neue','Nunito','Arial Rounded MT Bold',Arial,sans-serif;
-  background-image: url('assets/Kish.and.Kosh.Space.Background.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background:#06142b;
   min-height:100vh;
-  display:flex;align-items:center;justify-content:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   color:#fff;
+  overflow:hidden;
+  position:relative;
 }
-.wrap{width:100%;max-width:700px;padding:10px}
-h1{text-align:center;font-size:2.2rem;font-weight:700;color:#fff;
-   text-shadow:0 3px 10px rgba(0,0,0,0.3);margin-bottom:2px;letter-spacing:1px;font-family:'Andika','Comic Neue','Nunito','Arial Rounded MT Bold',Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"}
-.flag{height:30px;vertical-align:middle;margin-right:8px}
-.subtitle{text-align:center;font-size:1rem;color:rgba(255,255,255,0.7);margin-bottom:10px}
-.level-bar{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.dot{width:15px;height:15px;border-radius:50%;background:rgba(255,255,255,.25);
-     border:2px solid rgba(255,255,255,.4);transition:all .3s}
-.dot.done{background:#5dd45d;border-color:#3db83d}
-.dot.cur{background:#ffd700;border-color:#ffb700;transform:scale(1.35);
-         box-shadow:0 0 8px rgba(255,215,0,.6)}
-.card{background:rgba(255,255,255,0.55);backdrop-filter:blur(8px);border-radius:24px;padding:20px 20px;
-      box-shadow:0 15px 60px rgba(0,0,0,0.30);color:#222}
-.top-bar{display:flex;justify-content:space-between;font-size:1rem;
-         font-weight:600;color:#555;margin-bottom:10px}
-.top-bar .val{color:#1a5fa8;font-weight:700;font-size:1.1rem}
-.question{text-align:center;font-size:1.5rem;font-weight:700;color:#1a3a6e;margin-bottom:2px}
-.sublabel{text-align:center;font-size:0.95rem;color:#888;margin-bottom:12px;font-weight:600}
+
+.wrap{
+  width:100%;
+  max-width:700px;
+  padding:10px;
+  position:relative;
+  z-index:2;
+}
+
+h1{
+  text-align:center;
+  font-size:2.2rem;
+  font-weight:700;
+  color:#fff;
+  text-shadow:0 3px 10px rgba(0,0,0,0.3);
+  margin-bottom:2px;
+  letter-spacing:1px;
+  font-family:'Andika','Comic Neue','Nunito','Arial Rounded MT Bold',Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"
+}
+
+.flag{
+  height:30px;
+  vertical-align:middle;
+  margin-right:8px
+}
+
+.subtitle{
+  text-align:center;
+  font-size:1rem;
+  color:rgba(255,255,255,0.7);
+  margin-bottom:10px
+}
+
+.level-bar{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:12px
+}
+
+.dot{
+  width:15px;
+  height:15px;
+  border-radius:50%;
+  background:rgba(255,255,255,.25);
+  border:2px solid rgba(255,255,255,.4);
+  transition:all .3s
+}
+
+.dot.done{
+  background:#5dd45d;
+  border-color:#3db83d
+}
+
+.dot.cur{
+  background:#ffd700;
+  border-color:#ffb700;
+  transform:scale(1.35);
+  box-shadow:0 0 8px rgba(255,215,0,.6)
+}
+
+.card{
+  background:rgba(255,255,255,0.55);
+  backdrop-filter:blur(8px);
+  border-radius:24px;
+  padding:20px 20px;
+  box-shadow:0 15px 60px rgba(0,0,0,0.30);
+  color:#222
+}
+
+.top-bar{
+  display:flex;
+  justify-content:space-between;
+  font-size:1rem;
+  font-weight:600;
+  color:#555;
+  margin-bottom:10px
+}
+
+.top-bar .val{
+  color:#1a5fa8;
+  font-weight:700;
+  font-size:1.1rem
+}
+
+.question{
+  text-align:center;
+  font-size:1.5rem;
+  font-weight:700;
+  color:#1a3a6e;
+  margin-bottom:2px
+}
+
+.sublabel{
+  text-align:center;
+  font-size:0.95rem;
+  color:#888;
+  margin-bottom:12px;
+  font-weight:600
+}
+
 .coins-area{
   background:linear-gradient(135deg,#f0f4ff,#e8f0fe);
-  border-radius:18px;padding:16px 12px;min-height:120px;
-  display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:center;
-  border:2px solid #d0daf5;margin-bottom:24px;
+  border-radius:18px;
+  padding:16px 12px;
+  min-height:120px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+  align-items:center;
+  justify-content:center;
+  border:2px solid #d0daf5;
+  margin-bottom:24px;
+  flex:1;
 }
-.coin{display:inline-block;animation:drop .45s cubic-bezier(.34,1.56,.64,1) both;
-      cursor:default;transition:transform .2s}
-.coin:hover{transform:translateY(-5px) rotate(5deg) scale(1.08)}
-@keyframes drop{from{opacity:0;transform:translateY(-30px) scale(0.5) rotate(-15deg)}to{opacity:1;transform:none}}
-.input-row{display:flex;gap:12px;justify-content:center;align-items:center}
+
+.coin{
+  display:inline-block;
+  animation:drop .45s cubic-bezier(.34,1.56,.64,1) both;
+  cursor:default;
+  transition:transform .2s
+}
+
+.coin:hover{
+  transform:translateY(-5px) rotate(5deg) scale(1.08)
+}
+
+@keyframes drop{
+  from{opacity:0;transform:translateY(-30px) scale(0.5) rotate(-15deg)}
+  to{opacity:1;transform:none}
+}
+
+.input-row{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  align-items:center
+}
+
 input[type=text]{
-  width:90px;height:58px;font-size:2rem;text-align:center;border-radius:14px;
-  border:3px solid #c0cce8;background:#f5f8ff;color:#1a3a6e;outline:none;
-  font-weight:700;font-family:'Andika','Comic Neue','Nunito','Arial Rounded MT Bold',Arial,sans-serif;
-  transition:border-color .2s,box-shadow .2s;-moz-appearance:textfield;
+  width:90px;
+  height:58px;
+  font-size:2rem;
+  text-align:center;
+  border-radius:14px;
+  border:3px solid #c0cce8;
+  background:#f5f8ff;
+  color:#1a3a6e;
+  outline:none;
+  font-weight:700;
+  font-family:'Andika','Comic Neue','Nunito','Arial Rounded MT Bold',Arial,sans-serif;
+  transition:border-color .2s,box-shadow .2s;
+  -moz-appearance:textfield;
 }
+
 input[type=text]::-webkit-inner-spin-button,
-input[type=text]::-webkit-outer-spin-button{-webkit-appearance:none}
-input[type=text]:focus{border-color:#4a90d9;box-shadow:0 0 0 3px rgba(74,144,217,0.2)}
-input[type=text].shake{animation:shake .4s;border-color:#e53935;box-shadow:0 0 0 3px rgba(229,57,53,0.2)}
-input[type=text].ok{border-color:#43a047;box-shadow:0 0 0 3px rgba(67,160,71,0.2)}
-@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}
-  40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+input[type=text]::-webkit-outer-spin-button{
+  -webkit-appearance:none
+}
+
+input[type=text]:focus{
+  border-color:#4a90d9;
+  box-shadow:0 0 0 3px rgba(74,144,217,0.2)
+}
+
+input[type=text].shake{
+  animation:shake .4s;
+  border-color:#e53935;
+  box-shadow:0 0 0 3px rgba(229,57,53,0.2)
+}
+
+input[type=text].ok{
+  border-color:#43a047;
+  box-shadow:0 0 0 3px rgba(67,160,71,0.2)
+}
+
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-9px)}
+  40%{transform:translateX(9px)}
+  60%{transform:translateX(-6px)}
+  80%{transform:translateX(6px)}
+}
+
 button.check{
-  padding:14px 30px;font-size:1.1rem;font-weight:700;
+  padding:14px 30px;
+  font-size:1.1rem;
+  font-weight:700;
   font-family:'Andika','Comic Neue','Nunito','Arial Rounded MT Bold',Arial,sans-serif;
-  border:none;border-radius:14px;background:linear-gradient(135deg,#4a90d9,#1a5fa8);
-  color:#fff;cursor:pointer;box-shadow:0 5px 16px rgba(26,95,168,0.4);
-  transition:transform .15s,box-shadow .15s;letter-spacing:.5px;
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(135deg,#4a90d9,#1a5fa8);
+  color:#fff;
+  cursor:pointer;
+  box-shadow:0 5px 16px rgba(26,95,168,0.4);
+  transition:transform .15s,box-shadow .15s;
+  letter-spacing:.5px
 }
-button.check:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(26,95,168,0.5)}
-button.check:active{transform:translateY(1px)}
-.fb{text-align:center;font-size:1.3rem;font-weight:700;height:38px;margin-top:10px;
-    font-family:'Andika','Comic Neue','Nunito','Arial Rounded MT Bold',Arial,sans-serif}
-.fb.wrong{color:#e53935}.fb.right{color:#2e7d32}
-.hint{text-align:center;font-size:.8rem;color:#aaa;margin-top:4px;font-weight:600}
-#win{display:none;text-align:center;padding:30px 20px}
-#win h2{font-size:2.4rem;font-weight:700;color:#1a5fa8;margin-bottom:8px}
-#win .stars{font-size:2.5rem;margin-bottom:10px}
-#win p{color:#555;font-size:1.1rem;margin-bottom:26px;font-weight:600}
+
+button.check:hover{
+  transform:translateY(-2px);
+  box-shadow:0 7px 20px rgba(26,95,168,0.5)
+}
+
+button.check:active{
+  transform:translateY(1px)
+}
+
+.fb{
+  text-align:center;
+  font-size:1.3rem;
+  font-weight:700;
+  height:38px;
+  margin-top:10px;
+  font-family:'Andika','Comic Neue','Nunito','Arial Rounded MT Bold',Arial,sans-serif
+}
+
+.fb.wrong{color:#e53935}
+.fb.right{color:#2e7d32}
+
+.hint{
+  text-align:center;
+  font-size:.8rem;
+  color:#aaa;
+  margin-top:4px;
+  font-weight:600
+}
+
+#win{
+  display:none;
+  text-align:center;
+  padding:30px 20px
+}
+
+#win h2{
+  font-size:2.4rem;
+  font-weight:700;
+  color:#1a5fa8;
+  margin-bottom:8px
+}
+
+#win .stars{
+  font-size:2.5rem;
+  margin-bottom:10px
+}
+
+#win p{
+  color:#555;
+  font-size:1.1rem;
+  margin-bottom:26px;
+  font-weight:600
+}
+
 button.restart{
-  padding:14px 36px;font-size:1.1rem;font-weight:700;
+  padding:14px 36px;
+  font-size:1.1rem;
+  font-weight:700;
   font-family:'Andika','Comic Neue','Nunito','Arial Rounded MT Bold',Arial,sans-serif;
-  border:none;border-radius:14px;background:linear-gradient(135deg,#4a90d9,#1a5fa8);
-  color:#fff;cursor:pointer;box-shadow:0 5px 16px rgba(26,95,168,0.4);
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(135deg,#4a90d9,#1a5fa8);
+  color:#fff;
+  cursor:pointer;
+  box-shadow:0 5px 16px rgba(26,95,168,0.4)
 }
+
 /* Kish image sizing */
 .character{
   text-align:center;
-  margin: 8px 0 14px;
+  margin:8px 0 14px;
 }
 
 .character img{
-  width: 180px;
-  height: auto;
-  max-width: 100%;
+  width:180px;
+  height:auto;
+  max-width:100%;
 }
 
 .speech-bubble{
-  position: relative;
-  margin: 5px auto 10px auto;
-  max-width: 480px;
-  width: fit-content;
-  background: white;
-  border-radius: 10px;
-  padding: 10px 20px;
-  color: #1a3a6e;
-  font-weight: bold;
-  text-align: center;
-  line-height: 1.3;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  position:relative;
+  margin:5px auto 10px auto;
+  max-width:480px;
+  width:fit-content;
+  background:white;
+  border-radius:10px;
+  padding:10px 20px;
+  color:#1a3a6e;
+  font-weight:bold;
+  text-align:center;
+  line-height:1.3;
+  box-shadow:0 2px 5px rgba(0,0,0,0.2);
 }
 
 .speech-bubble::after{
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 20px;
-  width: 0;
-  height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-top: 10px solid white;
+  content:'';
+  position:absolute;
+  bottom:-10px;
+  left:20px;
+  width:0;
+  height:0;
+  border-left:10px solid transparent;
+  border-right:10px solid transparent;
+  border-top:10px solid white;
 }
 
 /* Layout row for Kish + coins */
@@ -133,199 +335,361 @@ button.restart{
   margin-bottom:16px;
 }
 
-/* Let coins area flex properly */
-.coins-area{
-  flex:1;
+/* ───────────────── Background layers ───────────────── */
+
+.bg-space,
+.bg-earth,
+.bg-ship{
+  position:fixed;
+  pointer-events:none;
+  z-index:0;
+}
+
+.bg-space{
+  inset:0;
+  background-image:url('assets/Space.png');
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+}
+
+.bg-earth{
+  left:0;
+  bottom:-38vh;
+  width:100vw;
+  max-width:none;
+  opacity:0.95;
+}
+
+.bg-ship{
+  top:6vh;
+  right:-260px;
+  width:min(24vw, 220px);
+}
+
+/* start-of-game animations */
+.bg-earth.rise{
+  animation:earthRise 5s ease-out forwards;
+}
+
+.bg-ship.fly-in{
+  animation:shipFlyIn 4.5s ease-out forwards, shipHover 3.2s ease-in-out 4.5s infinite;
+}
+
+/* end-of-game animations */
+.bg-earth.lower{
+  animation:earthLower 2.8s ease-in forwards;
+}
+
+.bg-ship.fly-out{
+  animation:shipFlyOut 2.2s ease-in forwards;
+}
+
+@keyframes earthRise{
+  from{
+    bottom:-38vh;
+    transform:scale(1.02);
+  }
+  to{
+    bottom:-20vh;
+    transform:scale(1);
+  }
+}
+
+@keyframes earthLower{
+  from{
+    bottom:-20vh;
+    transform:scale(1);
+  }
+  to{
+    bottom:-42vh;
+    transform:scale(0.98);
+  }
+}
+
+@keyframes shipFlyIn{
+  from{
+    right:-260px;
+    top:10vh;
+    transform:rotate(-8deg);
+  }
+  to{
+    right:3vw;
+    top:6vh;
+    transform:rotate(0deg);
+  }
+}
+
+@keyframes shipHover{
+  0%   { transform:translateY(0px) rotate(0deg); }
+  50%  { transform:translateY(-10px) rotate(1deg); }
+  100% { transform:translateY(0px) rotate(0deg); }
+}
+
+@keyframes shipFlyOut{
+  from{
+    right:3vw;
+    top:6vh;
+    transform:translateY(0) rotate(0deg);
+    opacity:1;
+  }
+  to{
+    right:-280px;
+    top:2vh;
+    transform:translateY(-20px) rotate(8deg);
+    opacity:0.9;
+  }
 }
 
 @media (max-width: 768px) {
   .game-row {
-    flex-direction: column;
+    flex-direction:column;
   }
   .character {
-    margin-bottom: 20px;
+    margin-bottom:20px;
   }
   .character img {
-    width: 160px;
+    width:160px;
   }
   .speech-bubble {
-    max-width: 100%;
-    width: auto;
-    margin: 5px 0 10px 0;
+    max-width:100%;
+    width:auto;
+    margin:5px 0 10px 0;
   }
   .coins-area {
-    width: 100%;
-    min-height: 100px;
-    padding: 12px 8px;
+    width:100%;
+    min-height:100px;
+    padding:12px 8px;
   }
   .card {
-    padding: 15px 15px;
+    padding:15px 15px;
   }
   input[type=text] {
-    width: 100px;
-    height: 60px;
-    font-size: 2.2rem;
+    width:100px;
+    height:60px;
+    font-size:2.2rem;
   }
   button.check {
-    padding: 16px 32px;
-    font-size: 1.2rem;
+    padding:16px 32px;
+    font-size:1.2rem;
+  }
+}
+
+@media (max-width: 700px){
+  h1 {
+    font-size:1.5rem;
+    margin:5px 0;
+  }
+  .subtitle {
+    font-size:0.8rem;
+    margin-bottom:6px;
+  }
+  .level-bar {
+    margin-bottom:6px;
+  }
+  .level-bar .dot {
+    width:12px;
+    height:12px;
+    margin:0 3px;
+  }
+
+  .card {
+    padding:12px;
+  }
+  .top-bar {
+    margin-bottom:4px;
+  }
+  .speech-bubble {
+    margin:4px auto 6px auto;
+    font-size:0.9rem;
+  }
+  .game-row {
+    gap:20px;
+  }
+  .coins-area {
+    min-height:80px;
+    padding:10px;
+  }
+  .input-row {
+    margin-top:10px;
+  }
+
+  input[type=text] {
+    width:90px;
+    height:50px;
+    font-size:1.8rem;
+  }
+  button.check {
+    padding:12px 24px;
+    font-size:1rem;
+  }
+
+  .fb {
+    margin-top:4px;
+  }
+  .hint {
+    margin-top:2px;
+  }
+
+  h1 {
+    font-size:1.2rem;
+  }
+  .subtitle {
+    display:none;
+  }
+  .level-bar {
+    margin-bottom:2px;
+  }
+  .level-bar .dot {
+    width:8px;
+    height:8px;
+    margin:0 2px;
+  }
+  .card {
+    padding:6px;
+  }
+  .top-bar {
+    margin-bottom:2px;
+    font-size:0.85rem;
+  }
+  .speech-bubble {
+    padding:4px 8px;
+    margin:2px auto 4px auto;
+  }
+  .game-row {
+    gap:4px;
+    margin-bottom:2px;
+  }
+  .coins-area {
+    min-height:50px;
+    padding:4px 2px;
+  }
+  .input-row {
+    gap:4px;
+    margin-top:4px;
+  }
+  input[type=text] {
+    width:75px;
+    height:40px;
+    font-size:1.6rem;
+  }
+  button.check {
+    padding:10px 20px;
+    font-size:0.9rem;
+  }
+
+.bg-earth{
+  left:0;
+  width:100vw;
+  bottom:-34vh;
+}
+  .bg-ship{
+    width:120px;
+    top:8vh;
+  }
+
+  @keyframes earthRise{
+    from{
+      bottom:-34vh;
+      transform:translateX(-50%) scale(1.02);
+    }
+    to{
+      bottom:-16vh;
+      transform:translateX(-50%) scale(1);
+    }
+  }
+
+  @keyframes earthLower{
+    from{
+      bottom:-16vh;
+      transform:translateX(-50%) scale(1);
+    }
+    to{
+      bottom:-38vh;
+      transform:translateX(-50%) scale(0.98);
+    }
+  }
+
+  @keyframes shipFlyIn{
+    from{
+      right:-180px;
+      top:10vh;
+      transform:rotate(-8deg);
+    }
+    to{
+      right:2vw;
+      top:8vh;
+      transform:rotate(0deg);
+    }
+  }
+
+  @keyframes shipFlyOut{
+    from{
+      right:2vw;
+      top:8vh;
+      transform:translateY(0) rotate(0deg);
+      opacity:1;
+    }
+    to{
+      right:-190px;
+      top:3vh;
+      transform:translateY(-15px) rotate(8deg);
+      opacity:0.9;
+    }
   }
 }
 
 @media (max-width: 480px) {
   h1 {
-    font-size: 1.8rem;
+    font-size:1.8rem;
   }
   .subtitle {
-    font-size: 0.9rem;
+    font-size:0.9rem;
   }
   .card {
-    padding: 10px 10px;
+    padding:10px 10px;
   }
   .character img {
-    width: 130px;
+    width:130px;
   }
   .speech-bubble {
-    padding: 8px 15px;
-    font-size: 0.9rem;
+    padding:8px 15px;
+    font-size:0.9rem;
   }
   .question {
-    font-size: 1.3rem;
+    font-size:1.3rem;
   }
   .sublabel {
-    font-size: 0.85rem;
+    font-size:0.85rem;
   }
   .coins-area {
-    min-height: 80px;
-    padding: 10px 6px;
+    min-height:80px;
+    padding:10px 6px;
   }
   input[type=text] {
-    width: 90px;
-    height: 55px;
-    font-size: 2rem;
+    width:90px;
+    height:55px;
+    font-size:2rem;
   }
   button.check {
-    padding: 14px 28px;
-    font-size: 1.1rem;
+    padding:14px 28px;
+    font-size:1.1rem;
   }
   .fb {
-    font-size: 1.1rem;
+    font-size:1.1rem;
   }
   .hint {
-    font-size: 0.75rem;
-  }
-}
-
-@media (max-width: 700px) {
-  /* top area */
-  h1 {
-    font-size: 1.5rem;
-    margin: 5px 0;
-  }
-  .subtitle {
-    font-size: 0.8rem;
-    margin-bottom: 6px;
-  }
-  .level-bar {
-    margin-bottom: 6px;
-  }
-  .level-bar .dot {
-    width: 12px;
-    height: 12px;
-    margin: 0 3px;
-  }
-
-  /* card spacing */
-  .card {
-    padding: 12px;
-  }
-  .top-bar {
-    margin-bottom: 4px;
-  }
-  .speech-bubble {
-    margin: 4px auto 6px auto;
-    font-size: 0.9rem;
-  }
-  .game-row {
-    gap: 20px;
-  }
-  .coins-area {
-    min-height: 80px;
-    padding: 10px;
-  }
-  .input-row {
-    margin-top: 10px;
-  }
-
-  /* controls */
-  input[type=text] {
-    width: 90px;
-    height: 50px;
-    font-size: 1.8rem;
-  }
-  button.check {
-    padding: 12px 24px;
-    font-size: 1rem;
-  }
-
-  /* feedback/hint */
-  .fb {
-    margin-top: 4px;
-  }
-  .hint {
-    margin-top: 2px;
-  }
-
-  /* extra compression */
-  h1 {
-    font-size: 1.2rem;
-  }
-  .subtitle {
-    display: none;
-  }
-  .level-bar {
-    margin-bottom: 2px;
-  }
-  .level-bar .dot {
-    width: 8px;
-    height: 8px;
-    margin: 0 2px;
-  }
-  .card {
-    padding: 6px;
-  }
-  .top-bar {
-    margin-bottom: 2px;
-    font-size: 0.85rem;
-  }
-  .speech-bubble {
-    padding: 4px 8px;
-    margin: 2px auto 4px auto;
-  }
-  .game-row {
-    gap: 8px;
-    margin-bottom: 4px;
-  }
-  .coins-area {
-    min-height: 50px;
-  }
-  .input-row {
-    gap: 4px;
-    margin-top: 4px;
-  }
-  input[type=text] {
-    width: 75px;
-    height: 40px;
-    font-size: 1.6rem;
-  }
-  button.check {
-    padding: 10px 20px;
-    font-size: 0.9rem;
+    font-size:0.75rem;
   }
 }
 </style>
 </head>
+
 <body>
+<div class="bg-space"></div>
+<img class="bg-earth" id="earth" src="assets/Earth.png" alt="">
+<img class="bg-ship" id="ship" src="assets/Spaceship.png" alt="">
+
 <div class="wrap">
   <h1 class="title"><img src="assets/Union.Jack.png" class="flag">Coin Counting</h1>
   <p class="subtitle">Count the coins and type your answer!</p>
@@ -336,24 +700,25 @@ button.restart{
       <span>Level <span class="val" id="lnum">1</span></span>
       <span>Score: <span class="val" id="sc">0</span></span>
     </div>
+
     <div class="speech-bubble">
       <div class="question">How many coins are there?</div>
       <div class="sublabel" id="sub"></div>
     </div>
-<div class="game-row">
 
-  <div class="character">
-    <img id="kish" src="assets/Kish1.png" alt="Kish speaking">
+    <div class="game-row">
+      <div class="character">
+        <img id="kish" src="assets/Kish1.png" alt="Kish speaking">
+      </div>
 
-  </div>
+      <div class="coins-area" id="area"></div>
+    </div>
 
-
-  <div class="coins-area" id="area"></div>
-</div>
     <div class="input-row">
       <input type="text" inputmode="numeric" pattern="[0-9]*" id="ans" placeholder="?" autocomplete="off">
       <button class="check" onclick="check()">Check &#10003;</button>
     </div>
+
     <div class="fb" id="fb"></div>
     <div class="hint">Type your answer and press Enter &#8629;</div>
   </div>
@@ -367,26 +732,15 @@ button.restart{
 </div>
 
 <script>
-// ─── Asset folder scheme ────────────────────────────────────────────────────
-//
-//  your-project/
-//  ├── coin_counting_game.html
-//  └── assets/
-//      └── coins/
-//          ├── 1p.png
-//          ├── 2p.png
-//          ├── 5p.png
-//          ├── 10p.png
-//          ├── 20p.png
-//          ├── 50p.png
-//          ├── 1pound.png    ← no £ symbol in filenames
-//          └── 2pound.png
-//
-//  If a PNG is missing, the game falls back to the SVG renderer automatically.
-
-const COIN_FILES={
-  '1p':'1p','2p':'2p','5p':'5p','10p':'10p',
-  '20p':'20p','50p':'50p','£1':'1pound','£2':'2pound'
+const COIN_FILES = {
+  '1p':'1p',
+  '2p':'2p',
+  '5p':'5p',
+  '10p':'10p',
+  '20p':'20p',
+  '50p':'50p',
+  '£1':'1pound',
+  '£2':'2pound'
 };
 
 const COIN_SIZES = {
@@ -402,7 +756,7 @@ const COIN_SIZES = {
 
 function coinImg(type){
   const sz = COIN_SIZES[type] || 80;
-  const file=COIN_FILES[type]||type;
+  const file = COIN_FILES[type] || type;
   return `<img src="assets/coins/${file}.png"
                alt="${type} coin"
                width="${sz}" height="${sz}"
@@ -410,14 +764,14 @@ function coinImg(type){
                onerror="this.outerHTML=coinSVGFallback('${type}',${sz})">`;
 }
 
-// ─── SVG fallback renderer ──────────────────────────────────────────────────
-
 function adj(hex,p){
-  let r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  let r=parseInt(hex.slice(1,3),16),
+      g=parseInt(hex.slice(3,5),16),
+      b=parseInt(hex.slice(5,7),16);
   r=Math.min(255,Math.max(0,r+p*2.55))|0;
   g=Math.min(255,Math.max(0,g+p*2.55))|0;
   b=Math.min(255,Math.max(0,b+p*2.55))|0;
-  return'#'+r.toString(16).padStart(2,'0')+g.toString(16).padStart(2,'0')+b.toString(16).padStart(2,'0');
+  return '#'+r.toString(16).padStart(2,'0')+g.toString(16).padStart(2,'0')+b.toString(16).padStart(2,'0');
 }
 
 function heptPath(cx,cy,r){
@@ -430,42 +784,49 @@ function heptPath(cx,cy,r){
 }
 
 function coinSVGFallback(type,sz){
-  const configs={
+  const configs = {
     '1p': {bg:'#c8722a',edge:'#7a3e0a',text:'1p',tc:'#5a2c00',rim:'#d4813a',milled:true},
     '2p': {bg:'#c8722a',edge:'#7a3e0a',text:'2p',tc:'#5a2c00',rim:'#d4813a',milled:true},
-    '5p': {bg:'#d8d8d8',edge:'#888',  text:'5p',tc:'#333',   rim:'#bbb',   milled:true},
-    '10p':{bg:'#d8d8d8',edge:'#888',  text:'10p',tc:'#333',  rim:'#bbb',   milled:true},
-    '20p':{bg:'#d8d8d8',edge:'#888',  text:'20p',tc:'#333',  rim:'#bbb',   hept:true},
-    '50p':{bg:'#d8d8d8',edge:'#888',  text:'50p',tc:'#333',  rim:'#bbb',   hept:true},
+    '5p': {bg:'#d8d8d8',edge:'#888',text:'5p',tc:'#333',rim:'#bbb',milled:true},
+    '10p':{bg:'#d8d8d8',edge:'#888',text:'10p',tc:'#333',rim:'#bbb',milled:true},
+    '20p':{bg:'#d8d8d8',edge:'#888',text:'20p',tc:'#333',rim:'#bbb',hept:true},
+    '50p':{bg:'#d8d8d8',edge:'#888',text:'50p',tc:'#333',rim:'#bbb',hept:true},
     '£1': {bg:'#d4a017',edge:'#8a6200',text:'£1',tc:'#4a3000',rim:'#c49a15',milled:true},
-    '£2': {bg:'#d4a017',edge:'#8a6200',text:'£2',tc:'#4a3000',rim:'#c49a15',milled:true,bi:true},
+    '£2': {bg:'#d4a017',edge:'#8a6200',text:'£2',tc:'#4a3000',rim:'#c49a15',milled:true,bi:true}
   };
-  const c=configs[type]||configs['1p'];
-  const S=sz,cx=S/2,cy=S/2,r=S/2-3;
-  const id='fb'+type.replace(/[^a-z0-9]/gi,'X')+(Math.random()*1e5|0);
-  const pts=c.hept?heptPath(cx,cy,r):'';
-  const ptsI=c.hept?heptPath(cx,cy,r*0.88):'';
 
-  const shapeEdge=c.hept
-    ?`<polygon points="${pts}" fill="${c.edge}" filter="url(#${id}sh)"/>`
-    :`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${c.edge}" filter="url(#${id}sh)"/>`;
-  const shapeFace=c.hept
-    ?`<polygon points="${pts}" fill="url(#${id}g)" stroke="${c.rim}" stroke-width="2"/>`
-    :`<circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#${id}g)" stroke="${c.rim}" stroke-width="2"/>`;
-  const innerRing=c.hept
-    ?`<polygon points="${ptsI}" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>`
-    :`<circle cx="${cx}" cy="${cy}" r="${(r*0.86).toFixed(1)}" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>`;
-  const rimOverlay=c.hept?''
-    :`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(0,0,0,0.18)" stroke-width="${(r*0.07).toFixed(1)}"/>`;
-  const milledEdge=c.milled?Array.from({length:36},(_,i)=>{
-    const a=i*10*Math.PI/180,ex=cx+(r-1)*Math.cos(a),ey=cy+(r-1)*Math.sin(a);
-    return`<circle cx="${ex.toFixed(1)}" cy="${ey.toFixed(1)}" r="${(r*0.04).toFixed(1)}" fill="rgba(0,0,0,0.18)"/>`;
-  }).join(''):'';
-  const bimetal=c.bi
-    ?`<circle cx="${cx}" cy="${cy}" r="${(r*0.60).toFixed(1)}" fill="url(#${id}ig)" stroke="rgba(150,120,0,0.5)" stroke-width="1.5"/>`
-    :'';
-  const fs=type.length>2?r*0.36:r*0.44;
-  const textCy=c.bi?(cy+(r*0.60)*0.52).toFixed(1):(cy+r*0.52).toFixed(1);
+  const c = configs[type] || configs['1p'];
+  const S = sz, cx = S/2, cy = S/2, r = S/2-3;
+  const id = 'fb'+type.replace(/[^a-z0-9]/gi,'X')+(Math.random()*1e5|0);
+  const pts = c.hept ? heptPath(cx,cy,r) : '';
+  const ptsI = c.hept ? heptPath(cx,cy,r*0.88) : '';
+
+  const shapeEdge = c.hept
+    ? `<polygon points="${pts}" fill="${c.edge}" filter="url(#${id}sh)"/>`
+    : `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${c.edge}" filter="url(#${id}sh)"/>`;
+
+  const shapeFace = c.hept
+    ? `<polygon points="${pts}" fill="url(#${id}g)" stroke="${c.rim}" stroke-width="2"/>`
+    : `<circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#${id}g)" stroke="${c.rim}" stroke-width="2"/>`;
+
+  const innerRing = c.hept
+    ? `<polygon points="${ptsI}" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>`
+    : `<circle cx="${cx}" cy="${cy}" r="${(r*0.86).toFixed(1)}" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>`;
+
+  const rimOverlay = c.hept ? ''
+    : `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(0,0,0,0.18)" stroke-width="${(r*0.07).toFixed(1)}"/>`;
+
+  const milledEdge = c.milled ? Array.from({length:36},(_,i)=>{
+    const a=i*10*Math.PI/180, ex=cx+(r-1)*Math.cos(a), ey=cy+(r-1)*Math.sin(a);
+    return `<circle cx="${ex.toFixed(1)}" cy="${ey.toFixed(1)}" r="${(r*0.04).toFixed(1)}" fill="rgba(0,0,0,0.18)"/>`;
+  }).join('') : '';
+
+  const bimetal = c.bi
+    ? `<circle cx="${cx}" cy="${cy}" r="${(r*0.60).toFixed(1)}" fill="url(#${id}ig)" stroke="rgba(150,120,0,0.5)" stroke-width="1.5"/>`
+    : '';
+
+  const fs = type.length>2 ? r*0.36 : r*0.44;
+  const textCy = c.bi ? (cy+(r*0.60)*0.52).toFixed(1) : (cy+r*0.52).toFixed(1);
 
   return `<svg width="${S}" height="${S}" viewBox="0 0 ${S} ${S}" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -474,11 +835,11 @@ function coinSVGFallback(type,sz){
       <stop offset="45%" stop-color="${c.bg}"/>
       <stop offset="100%" stop-color="${adj(c.bg,-24)}"/>
     </radialGradient>
-    ${c.bi?`<radialGradient id="${id}ig" cx="35%" cy="30%" r="70%">
+    ${c.bi ? `<radialGradient id="${id}ig" cx="35%" cy="30%" r="70%">
       <stop offset="0%" stop-color="#f2f2f2"/>
       <stop offset="50%" stop-color="#c0c0c0"/>
       <stop offset="100%" stop-color="#888"/>
-    </radialGradient>`:''}
+    </radialGradient>` : ''}
     <filter id="${id}sh"><feDropShadow dx="1.5" dy="2.5" stdDeviation="3" flood-color="rgba(0,0,0,0.45)"/></filter>
   </defs>
   ${shapeEdge}${shapeFace}${milledEdge}${innerRing}${bimetal}
@@ -494,7 +855,6 @@ function coinSVGFallback(type,sz){
 
 const coinTypes = ['1p','2p','5p','10p','20p','50p','£1','£2'];
 
-// Kish image sequence
 const kish_poses = ['Kish1.png', 'Kish2.png', 'Kish3.png', 'Kish4.png'];
 let kish_index = 0;
 
@@ -504,181 +864,248 @@ function changeKish() {
   kish.src = 'assets/' + kish_poses[kish_index];
 }
 
+function startScene() {
+  const earth = document.getElementById('earth');
+  const ship = document.getElementById('ship');
+
+  earth.classList.remove('lower', 'rise');
+  ship.classList.remove('fly-out', 'fly-in');
+
+  void earth.offsetWidth;
+  void ship.offsetWidth;
+
+  earth.classList.add('rise');
+  ship.classList.add('fly-in');
+}
+
+function endScene() {
+  const earth = document.getElementById('earth');
+  const ship = document.getElementById('ship');
+
+  earth.classList.remove('rise', 'lower');
+  ship.classList.remove('fly-in', 'fly-out');
+
+  void earth.offsetWidth;
+  void ship.offsetWidth;
+
+  earth.classList.add('lower');
+  ship.classList.add('fly-out');
+}
+
 function generateLevels() {
   let levels = [];
+
   function sameCombo(a,b) {
-    if(!a||!b) return false;
-    if(a.t!==b.t) return false;
-    if(a.t==='s') return a.coin===b.coin;
-    // compare types ignoring order
-    const ta=a.coins.map(c=>c[0]).slice().sort().join();
-    const tb=b.coins.map(c=>c[0]).slice().sort().join();
-    return ta===tb;
+    if(!a || !b) return false;
+    if(a.t !== b.t) return false;
+    if(a.t === 's') return a.coin === b.coin && a.count === b.count;
+
+    const ta = a.coins.map(c => `${c[0]}:${c[1]}`).slice().sort().join('|');
+    const tb = b.coins.map(c => `${c[0]}:${c[1]}`).slice().sort().join('|');
+    return ta === tb;
   }
-  // helper to push ensuring not same as previous
+
   function pushLevel(obj){
-    if(sameCombo(obj, levels[levels.length-1])){
-      // simple reroll by calling generator again
-      return false;
-    }
+    if(sameCombo(obj, levels[levels.length - 1])) return false;
     levels.push(obj);
     return true;
   }
-  // 7 single-coin questions (early ones favour smaller totals)
+
   for (let i = 0; i < 7; i++) {
-    let coin, count, ok=false;
+    let coin, count, ok = false;
     while(!ok){
       coin = coinTypes[Math.floor(Math.random() * coinTypes.length)];
-      // first three single-coin levels use 2-3 coins, later up to 5
       count = 2 + Math.floor(Math.random() * (i < 3 ? 2 : 4));
-      ok = pushLevel({ t: 's', coin, count, label: `${coin} coins`});
+      ok = pushLevel({ t:'s', coin, count, label:`${coin} coins` });
     }
   }
-  // 7 two-coin questions (slightly easier at start)
+
   for (let i = 0; i < 7; i++) {
-    let obj, ok=false;
+    let obj, ok = false;
     while(!ok){
       let selected = coinTypes.slice().sort(() => Math.random() - 0.5).slice(0, 2);
-      // first three mixed levels total 2-3, later up to 5
       let total = 2 + Math.floor(Math.random() * (i < 3 ? 2 : 4));
       let counts = [];
       let remaining = total;
+
       for (let j = 0; j < selected.length - 1; j++) {
         let c = 1 + Math.floor(Math.random() * (remaining - 1));
         counts.push(c);
         remaining -= c;
       }
+
       counts.push(remaining);
       let coins = selected.map((type, idx) => [type, counts[idx]]);
       coins.sort(() => Math.random() - 0.5);
-      obj = { t: 'm', coins, label: `${selected.join(' and ')} coins` };
+
+      obj = { t:'m', coins, label:`${selected.join(' and ')} coins` };
       ok = pushLevel(obj);
     }
   }
-  // 6 three-coin questions (early ones a bit lighter)
+
   for (let i = 0; i < 6; i++) {
-    let obj, ok=false;
+    let obj, ok = false;
     while(!ok){
       let selected = coinTypes.slice().sort(() => Math.random() - 0.5).slice(0, 3);
-      // first two three-coin levels total 3-4, later up to 5
       let total = 3 + Math.floor(Math.random() * (i < 2 ? 2 : 3));
       let counts = [1, 1, 1];
       let remaining = total - 3;
+
       for (let j = 0; j < remaining; j++) {
         counts[Math.floor(Math.random() * 3)]++;
       }
+
       let coins = selected.map((type, idx) => [type, counts[idx]]);
       coins.sort(() => Math.random() - 0.5);
-      obj = { t: 'm', coins, label: `${selected.join(', ').replace(/, ([^,]*)$/, ' and $1')} coins` };
+
+      obj = {
+        t:'m',
+        coins,
+        label:`${selected.join(', ').replace(/, ([^,]*)$/, ' and $1')} coins`
+      };
       ok = pushLevel(obj);
     }
   }
-  // Compute totals for mixed levels
+
   levels.forEach(l => {
-    if (l.t === 'm') l.count = l.coins.reduce((s, [, n]) => s + n, 0);
+    if (l.t === 'm') {
+      l.count = l.coins.reduce((s, [, n]) => s + n, 0);
+    }
   });
+
   return levels;
 }
 
 let LEVELS = generateLevels();
 
-// Runtime sanity checks
-LEVELS.filter(l=>l.t==='m').forEach(l=>{
-  if(l.coins.length>2)       console.warn('Level has >2 coin types:',l);
-  if(l.count<2||l.count>5)   console.warn('Level count out of 2–5:',l);
+LEVELS.filter(l => l.t === 'm').forEach(l => {
+  if (l.coins.length > 3) console.warn('Level has >3 coin types:', l);
+  if (l.count < 2 || l.count > 6) console.warn('Level count out of 2–6:', l);
 });
 
-let cur=0,score=0,att=0;
+let cur = 0, score = 0, att = 0;
 
 function buildBar(){
-  const bar=document.getElementById('bar');
-  bar.innerHTML='';
-  LEVELS.forEach((_,i)=>{
-    const d=document.createElement('div');
-    d.className='dot'+(i<cur?' done':i===cur?' cur':'');
+  const bar = document.getElementById('bar');
+  bar.innerHTML = '';
+
+  LEVELS.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i < cur ? ' done' : i === cur ? ' cur' : '');
     bar.appendChild(d);
   });
 }
 
 function render(){
-  const l=LEVELS[cur];
-  document.getElementById('lnum').textContent=cur+1;
-  document.getElementById('sc').textContent=score;
-  document.getElementById('fb').textContent='';
-  document.getElementById('fb').className='fb';
-  document.getElementById('sub').textContent=l.label||'';
-  const ans=document.getElementById('ans');
-  ans.value='';ans.className='';
-  const area=document.getElementById('area');
-  area.innerHTML='';
+  const l = LEVELS[cur];
+  document.getElementById('lnum').textContent = cur + 1;
+  document.getElementById('sc').textContent = score;
+  document.getElementById('fb').textContent = '';
+  document.getElementById('fb').className = 'fb';
+  document.getElementById('sub').textContent = l.label || '';
 
-  let list=[];
-  if(l.t==='s'){
-    for(let i=0;i<l.count;i++) list.push(l.coin);
+  const ans = document.getElementById('ans');
+  ans.value = '';
+  ans.className = '';
+
+  const area = document.getElementById('area');
+  area.innerHTML = '';
+
+  let list = [];
+
+  if(l.t === 's'){
+    for(let i = 0; i < l.count; i++) list.push(l.coin);
   } else {
-    l.coins.forEach(([t,n])=>{for(let i=0;i<n;i++) list.push(t)});
-    list.sort(()=>Math.random()-.5);
+    l.coins.forEach(([t,n]) => {
+      for(let i = 0; i < n; i++) list.push(t);
+    });
+    list.sort(() => Math.random() - .5);
   }
 
-  list.forEach((t,i)=>{
-    const sp=document.createElement('span');
-    sp.className='coin';
-    sp.style.animationDelay=(i*90)+'ms';
-    sp.innerHTML=coinImg(t);
+  list.forEach((t, i) => {
+    const sp = document.createElement('span');
+    sp.className = 'coin';
+    sp.style.animationDelay = (i * 90) + 'ms';
+    sp.innerHTML = coinImg(t);
     area.appendChild(sp);
   });
 
   buildBar();
-  att=0;
-  setTimeout(()=>ans.focus(),60);
+  att = 0;
+  setTimeout(() => ans.focus(), 60);
 }
 
 function check(){
-  const inp=document.getElementById('ans');
-  const v=parseInt(inp.value,10);
-  const l=LEVELS[cur];
-  const fb=document.getElementById('fb');
+  const inp = document.getElementById('ans');
+  const v = parseInt(inp.value, 10);
+  const l = LEVELS[cur];
+  const fb = document.getElementById('fb');
 
-  if(isNaN(v)){
-    fb.textContent='Please type a number!';
-    fb.className='fb wrong';
+  if (isNaN(v)) {
+    fb.textContent = 'Please type a number!';
+    fb.className = 'fb wrong';
     return;
   }
 
-  if(v===l.count){
-    fb.textContent='Correct! Well done! \uD83C\uDF1F';
-    fb.className='fb right';
-    inp.className='ok';
-    score+=Math.max(1,3-att);
-    document.getElementById('sc').textContent=score;
+  if (v === l.count) {
+    fb.textContent = 'Correct! Well done! 🌟';
+    fb.className = 'fb right';
+    inp.className = 'ok';
+    score += Math.max(1, 3 - att);
+    document.getElementById('sc').textContent = score;
     changeKish();
-    setTimeout(()=>{cur++;if(cur>=LEVELS.length)showWin();else render();},1200);
+
+    setTimeout(() => {
+      cur++;
+      if (cur >= LEVELS.length) {
+        showWin();
+      } else {
+        render();
+      }
+    }, 1200);
   } else {
     att++;
-    fb.textContent='Try again!';
-    fb.className='fb wrong';
-    inp.className='shake';
-    setTimeout(()=>{inp.className='';inp.value='';inp.focus();},460);
+    fb.textContent = 'Try again!';
+    fb.className = 'fb wrong';
+    inp.className = 'shake';
+
+    setTimeout(() => {
+      inp.className = '';
+      inp.value = '';
+      inp.focus();
+    }, 460);
   }
 }
 
 function showWin(){
-  document.getElementById('game').style.display='none';
-  document.getElementById('win').style.display='block';
-  document.getElementById('bar').innerHTML='';
-  document.getElementById('wintxt').textContent=
-    'You finished all '+LEVELS.length+' levels with '+score+' points! Amazing!';
+  endScene();
+
+  setTimeout(() => {
+    document.getElementById('game').style.display = 'none';
+    document.getElementById('win').style.display = 'block';
+    document.getElementById('bar').innerHTML = '';
+    document.getElementById('wintxt').textContent =
+      'You finished all ' + LEVELS.length + ' levels with ' + score + ' points! Amazing!';
+  }, 900);
 }
 
 function restart(){
   LEVELS = generateLevels();
-  cur=0;score=0;
-  document.getElementById('game').style.display='block';
-  document.getElementById('win').style.display='none';
+  cur = 0;
+  score = 0;
+
+  document.getElementById('game').style.display = 'block';
+  document.getElementById('win').style.display = 'none';
+
+  startScene();
   render();
 }
 
-document.addEventListener('keydown',e=>{if(e.key==='Enter') check();});
+document.addEventListener('keydown', e => {
+  if(e.key === 'Enter') check();
+});
+
+startScene();
 render();
 </script>
 </body>
